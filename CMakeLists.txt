@@ -4,7 +4,7 @@ project(ros_rigit)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS rospy message_generation)
+find_package(catkin REQUIRED COMPONENTS rospy geometry_msgs message_generation)
 
 catkin_python_setup()
 
