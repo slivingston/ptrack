@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <package>
-  <name>ros_rigit</name>
+  <name>ptrack</name>
   <version>0.0.0</version>
-  <description>The ros_rigit package</description>
+  <description>The ptrack package, in part based on the rigit
+  implementation by Shuo Han, as available from
+  http://github.com/hanshuo/ros_rigit.git
+  </description>
 
   <maintainer email="slivingston@cds.caltech.edu">Scott C. Livingston</maintainer>
   <author>Scott C. Livingston</author>
-  <author>Shuo Han</author>
 
   <license>BSD</license>
 

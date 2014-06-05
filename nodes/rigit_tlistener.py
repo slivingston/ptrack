@@ -12,16 +12,16 @@ whence the frame is given the name "fly" and the points defining it
 are (X1, Y1), (X2, Y2), ...
 
 Based on source code by Shuo Han.
-https://github.com/hanshuo/ros_rigit.git
+https://github.com/hanshuo/ptrack.git
 
 SCL; 4 Jun 2014
 """
 
-import roslib; roslib.load_manifest('ros_rigit')
+import roslib; roslib.load_manifest('ptrack')
 import rospy
 from trackem_ros.msg import MTCalPoints
-from ros_rigit.msg import pose_objects, pose_object
-from ros_rigit.rigit import rigit_ransac, rigit_nn
+from ptrack.msg import pose_objects, pose_object
+from ptrack.rigit import rigit_ransac, rigit_nn
 
 import numpy as np
 import sys

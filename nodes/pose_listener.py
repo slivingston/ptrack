@@ -8,11 +8,11 @@ https://github.com/hanshuo/ros_rigit.git
 SCL; 5 Jun 2014
 """
 
-import roslib; roslib.load_manifest('ros_rigit')
+import roslib; roslib.load_manifest('ptrack')
 import rospy
 import tf
 from geometry_msgs.msg import Pose2D
-from ros_rigit.msg import pose_objects
+from ptrack.msg import pose_objects
 
 import numpy
 from numpy import *
