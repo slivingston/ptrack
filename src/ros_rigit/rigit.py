@@ -4,7 +4,7 @@
 Based on source code by Shuo Han.
 https://github.com/hanshuo/ros_rigit.git
 
-SCL; 3 Jun 2014
+SCL; 4 Jun 2014
 """
 
 import numpy as np
@@ -13,6 +13,45 @@ from numpy import *
 
 import time
 import itertools
+
+
+def err2(body, world, R=None, T=None):
+    assert body.shape[1] == world.shape[1]
+    if R is None:
+        R = np.eye(2)
+    if T is None:
+        T = np.zeros(2).reshape((2,1))
+    total = 0.0
+    for i in range(body.shape[1]):
+        x = world[:,i]-(np.dot(R, body[:,i])+T)
+        total += np.dot(x, x)
+    return total
+
+
+def rigit2(body, world):
+    assert shape(world)[0] == 2 and shape(body)[0] == 2, \
+        'Only accepts points in R^2. Maybe try transposing the data matrices?'
+    assert shape(world)[1] == shape(body)[1], \
+        'Number of world points and body points does not match'
+    npoints = shape(world)[1]
+
+    centroid_body = mean(body, 1)
+    centroid_world = mean(world, 1)
+    T = centroid_world - centroid_body
+
+    body_nc = body - centroid_body[:,newaxis]
+    world_nc = world - centroid_world[:,newaxis]
+
+    X1 = np.sum(world_nc*body)
+    X2 = np.sum(world_nc[[1,0],:]*(body*np.outer(np.array([1,-1]), np.ones(npoints))))
+
+    theta = numpy.arctan2(X2, X1)
+    R = np.array([[np.cos(theta), -np.sin(theta)],
+                  [np.sin(theta), np.cos(theta)]])
+
+    T += np.dot(np.eye(2) - R, centroid_body)
+
+    return R, T, err2(body, world, R, T)
 
 
 def rigit(body, world):
@@ -79,13 +118,13 @@ def rigit_nn(body, world):
         dist_list = ((body[:,i][:,newaxis] - world)**2).sum(0)
         idx_corresp[i] = dist_list.argmin()
 
-    return rigit(body, world[:,idx_corresp]), idx_corresp
+    return rigit2(body, world[:,idx_corresp]), idx_corresp
 
 def rigit_ransac(body, world, max_iters, tol, hint=None):
     assert hasattr(itertools, 'permutations'), \
         'Needs itertools.permutations(). Please make sure the system runs Python 2.6 or higher.'
-    assert shape(world)[0] == 3 and shape(body)[0] == 3, \
-        'Only accepts points in R^3. Maybe try transposing the data matrices?'
+    assert shape(world)[0] == 2 and shape(body)[0] == 2, \
+        'Only accepts points in R^2. Maybe try transposing the data matrices?'
 
     p = shape(body)[1]; q = shape(world)[1]
     assert p > 0 and q > 0, \
@@ -112,15 +151,7 @@ def rigit_ransac(body, world, max_iters, tol, hint=None):
 
             for body_rand_idx in itertools.permutations(range(p), slength):
                 body_rand_pts = body[:, body_rand_idx]
-                R, T, err = rigit(body_rand_pts, world_rand_pts)
-                if R[2,2] < 0:
-                    continue
-                # print R
-                # print T
-                # print err
-                # print "="*60
-                # if R[2,2] < 0:
-                #     continue
+                R, T, err = rigit2(body_rand_pts, world_rand_pts)
 
                 if err <= tol:
                     
@@ -143,12 +174,12 @@ def rigit_ransac(body, world, max_iters, tol, hint=None):
 
 if __name__ == '__main__':
 
-    body = np.random.rand(3,10)
+    body = np.random.rand(2,10)
     
-    R = array([[2./3, 2./3, -1./3],
-               [-1./3, 2./3, 2./3],
-               [2./3, -1./3, 2./3]])
-    T = array([1., 2., 3.])
+    theta = 0.0
+    R = array([[np.cos(theta), -np.sin(theta)],
+               [np.sin(theta), np.cos(theta)]])
+    T = array([1., 2.])
 
     world = dot(R, body) + T[:,newaxis]
 
@@ -173,6 +204,7 @@ if __name__ == '__main__':
     print 'total iterations = %d' % (num_iter)
     print 'Time elapsed = %g (s)' % (time_elapsed)
     print 'Iterations per second = %g' % (num_iter/time_elapsed)
+    print R
     print R_ransac
     print T_ransac
     print err

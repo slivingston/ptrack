@@ -5,7 +5,7 @@ Echo transforms to terminal and publish to tf.
 Based on source code by Shuo Han.
 https://github.com/hanshuo/ros_rigit.git
 
-SCL; 31 May 2014
+SCL; 4 Jun 2014
 """
 
 import roslib; roslib.load_manifest('ros_rigit')
@@ -30,14 +30,13 @@ class Listener:
             R[3,3] = 1.
             R[:3,:3] = array(p.R).reshape(3,3)
             T = array(p.T)
+            aq = tf.transformations.quaternion_from_matrix(R)
             print '-'*80
             print p.name
-            print 'R = '
-            print R
-            print 'T = '
-            print T
-            self.br.sendTransform(T,
-                                  tf.transformations.quaternion_from_matrix(R),
+            theta = numpy.arctan2(R[1,0], R[0,0])
+            print 'pose = ', (T[0], T[1], theta)
+
+            self.br.sendTransform(T, aq,
                                   rospy.Time.now(), p.name+str("/base_link"), "/odom")
 
 if __name__ == '__main__':
