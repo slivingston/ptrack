@@ -41,11 +41,11 @@ class Listener:
                          MTCalPoints,
                          self.callback)
         print 
-        print 'rigit_listener intialized.\n'
-        print 'Waiting input from trackem_ros...'
+        print 'rigit_listener initialized.\n'
+        print 'Waiting for input from trackem_ros...'
 
     def init_refs(self, ref_poses):
-        print 'Start receiving input from trackem_ros. Publishing messages to \'pose estimation\'...'
+        print 'Start receiving input from trackem_ros.  Publishing messages to \'pose estimation\'...'
         self.names = [ref_pose[0] for ref_pose in ref_poses]
         self.origins = [ref_pose[1].copy() for ref_pose in ref_poses]
         self.last_poses = [ref_pose[1].copy() for ref_pose in ref_poses]
