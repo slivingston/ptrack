@@ -12,7 +12,7 @@ whence the frame is given the name "fly" and the points defining it
 are (X1, Y1), (X2, Y2), ...
 
 Based on source code by Shuo Han.
-https://github.com/hanshuo/ptrack.git
+https://github.com/hanshuo/ros_rigit.git
 
 SCL; 4 Jun 2014
 """
