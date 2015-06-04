@@ -1,0 +1,6 @@
+<launch>
+  <node pkg="ptrack" name="$(anon rigit_from_trackem)" type="rigit_tlistener.py" output="screen">
+    <remap from="/trackem/calpoints" to="/trackem_calpoints" />
+  </node>
+  <node pkg="ptrack" name="$(anon pose_listener)" type="pose_listener.py" output="log" />
+</launch>
