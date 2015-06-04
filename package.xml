@@ -4,7 +4,7 @@
   <version>0.0.0</version>
   <description>The ptrack package, in part based on the rigit
   implementation by Shuo Han, as available from
-  http://github.com/hanshuo/ros_rigit.git
+  https://github.com/hanshuo/ros_rigit.git
   </description>
 
   <maintainer email="slivingston@cds.caltech.edu">Scott C. Livingston</maintainer>
